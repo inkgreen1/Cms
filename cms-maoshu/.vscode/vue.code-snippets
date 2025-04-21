@@ -1,0 +1,74 @@
+{
+    "导入ref": {
+        "prefix": "iref",
+        "body": [
+            "import { ref${1:, reactive} } from \"vue\";"
+        ],
+        "description": "导入ref"
+    },
+    "vue3模板框架": {
+        "prefix": "vue3",
+        "body": [
+            "<template>",
+            "  <div>",
+            "    ",
+            "  </div>",
+            "</template>",
+            "",
+            "<script setup>",
+            "import { ref,reactive } from 'vue'",
+            "",
+            "</script>",
+            "",
+            "<style scoped>",
+            "",
+            "</style>"
+        ],
+        "description": "vue3模板框架"
+    },
+    "请求方法": {
+        "prefix": "ireq",
+        "body": [
+            "import {post,get} from '@/utils/request'"
+        ],
+        "description": "请求方法"
+    },
+    "formModelItems表单": {
+        "prefix": "items",
+        "body": [
+            "const formModelItems = reactive([",
+            "    {",
+            "        field:\"${1:name}\",",
+            "        label:\"${2:名称}\",",
+            "        placeholder:\"请输入${2:名称}\",",
+            "        type:\"${4|input,select,password,tree,textarea|}\",",
+            "        rules: [{ required: true, message: \"请先填写${2:名称}\", trigger: \"${5|blur,change|}\" }],",
+            "    },",
+            "])"
+        ],
+        "description": "formModelItems表单"
+    },
+    "columns表格": {
+        "prefix": "col",
+        "body": [
+            "const columns = [",
+            "  { label: \"ID\", field: \"id\"${1:, width: 100} },",
+            "]"
+        ],
+        "description": "columns表格"
+    },
+    "导入table": {
+        "prefix": "it",
+        "body": [
+            "import Table from \"@/components/Table.vue\";"
+        ],
+        "description": "导入table"
+    },
+    "导入form ": {
+        "prefix": "ifo",
+        "body": [
+            "import Form from '@/components/Form.vue'"
+        ],
+        "description": "导入form "
+    }
+}

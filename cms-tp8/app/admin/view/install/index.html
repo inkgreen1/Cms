@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CMS安装页面</title>
+    <!-- Import style -->
+    <link rel="stylesheet" href="//unpkg.com/element-plus/dist/index.css" />
+    <!-- Import Vue 3 -->
+    <script src="//unpkg.com/vue@3"></script>
+    <!-- Import component library -->
+    <script src="//unpkg.com/element-plus"></script>
+    <script src="//unpkg.com/axios/dist/axios.min.js"></script>
+    <style>
+        body{
+            background-color: #f5f5f5;
+        }
+        #app{
+            width:500px;
+            margin: 10px auto;
+            text-align: center;
+        }
+        .mt-30{
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div>
+            <h2>Cms安装页面</h2>
+        </div>
+
+        <el-form :model="form" ref="ruleFormRef" :rules="rules" label-width="auto">
+            <el-card>
+    
+              <el-form-item label="服务器地址" prop="hostname">
+                <el-input v-model="form.hostname" />
+              </el-form-item>
+              <el-form-item label="数据库名" prop="database">
+                <el-input v-model="form.database" />
+              </el-form-item>
+              <el-form-item label="用户名" prop="username">
+                <el-input v-model="form.username" />
+              </el-form-item>
+              <el-form-item label="密码" prop="password">
+                <el-input v-model="form.password" />
+              </el-form-item>
+              <el-form-item label="端口号" prop="hostport">
+                <el-input v-model="form.hostport" />
+              </el-form-item>
+              <el-form-item label="表前缀" prop="prefix">
+                <el-input v-model="form.prefix" />
+              </el-form-item>
+            </el-card>
+            <el-card class="mt-30">
+              <el-form-item label="管理员用户名" prop="adminname">
+                <el-input v-model="form.adminname" />
+              </el-form-item>
+              <el-form-item label="管理员密码" prop="adminpwd">
+                <el-input v-model="form.adminpwd" />
+              </el-form-item>
+              <el-form-item label="再输入一次密码" prop="adminrepwd">
+                <el-input v-model="form.adminrepwd" />
+              </el-form-item>
+              <el-form-item label="开启调试模式" prop="app_debug">
+                <el-radio-group v-model="form.app_debug">
+                  <el-radio :value="true" size="large">开启</el-radio>
+                  <el-radio :value="false" size="large">关闭</el-radio>
+                </el-radio-group>
+              </el-form-item>
+              <div class="center">
+                <el-button type="primary" @click="onSubmit(ruleFormRef)">立即安装</el-button>
+                        </div>
+            </el-card>
+        </el-form>
+
+    </div>
+    <script>
+    const App = {
+        setup(props) {
+            const  {ref,reactive} = Vue
+            const  {ElMessage} = ElementPlus
+            const ruleFormRef = ref()
+
+            const pwdRules = [
+                { required: true, message: '请输入密码', trigger: 'blur' },
+                { min:6, max:30, message: '密码的长度至少是6位，最多是30位', trigger: 'blur' },
+                { pattern:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{6,30}$/, message: '密码必须包含大小写字母、数字', trigger: 'blur' },
+            ]
+
+
+            const rules = reactive({
+                hostname: [ 
+                    { required: true, message: '请输入服务器地址', trigger: 'blur' },
+                ],
+                database: [
+                    { required: true, message: '请输入数据库名', trigger: 'blur' },
+                ],
+                username: [
+                    { required: true, message: '请输入用户名', trigger: 'blur' },
+                ],password: [
+                    { required: true, message: '请输入密码', trigger: 'blur' },
+                ],
+                hostport: [
+                    { required: true, message: '请输入端口号', trigger: 'blur' },
+                ],
+                prefix: [
+                    { required: true, message: '请输入前缀', trigger: 'blur' },
+                ],adminname: [
+                    { required: true, message: '请输入管理员账户', trigger: 'blur' },
+                ],
+                adminpwd:[
+                    ...pwdRules,
+                ],
+                adminrepwd:[
+                    ...pwdRules,
+                    { validator: (rule, value, callback) => {
+                        if (value !== form.adminpwd) {
+                        callback(new Error('两次输入的密码不一致'))
+                        } else {
+                        callback()
+                        }
+                    }, trigger: 'blur'
+                    }
+                ]
+            })
+
+            const form = reactive({
+                hostname: '127.0.0.1',
+                database:'',
+                username:'root',
+                password:'root',
+                hostport:'3306',
+                prefix:'ms_',
+
+                adminname:'admin',
+                adminpwd:'123456aA',
+                adminrepwd:'',
+                app_debug:true
+            })
+
+            const onSubmit = async (formElm)=>{
+                if(!formElm) return
+                await formElm.validate((valid)=>{
+                    if(valid){
+                        console.log('提交表单',form)
+                        axios.post("/admin/install",{...form})
+                        .then(res=>{
+                            console.log(res)
+                            const {data,code,msg} = res.data
+                            if(code == 1){
+                                ElMessage.success(msg)
+                            }
+                            else{
+                                ElMessage.error(msg)
+                            }
+                        })
+                    }else{
+                        return false
+                    }
+                })
+
+            }
+
+            return {
+                ruleFormRef,form,rules,onSubmit
+            }
+        }
+    };
+    const app = Vue.createApp(App);
+    app.use(ElementPlus);
+    app.mount("#app");
+</script>
+</body>
+</html>

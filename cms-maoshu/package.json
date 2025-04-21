@@ -1,0 +1,27 @@
+{
+  "name": "cms-maoshu",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@kangc/v-md-editor": "^2.3.18",
+    "axios": "^1.7.2",
+    "echarts": "^5.5.1",
+    "element-plus": "^2.7.6",
+    "pinia": "^2.1.7",
+    "vue": "^3.4.29",
+    "vue-cropper": "^1.1.4",
+    "vue-router": "^4.3.3",
+    "vue3-count-to": "^1.1.2"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.5",
+    "sass": "^1.78.0",
+    "vite": "^5.3.1"
+  }
+}
